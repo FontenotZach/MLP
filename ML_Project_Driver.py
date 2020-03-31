@@ -26,9 +26,13 @@ learning_Proportion = 1
 testing_Proportion = 0
 degree_Proportion = 0
 
+small_Interval = 0
+default_Interval = 0
+large_Interval = 0
+interval_Size = 120
+
 with open('options.json') as options:
     data = json.load(options)
-pprint(data)
 
 parsedOptions = data['Feature Generation Options']
 
@@ -63,6 +67,18 @@ if ('All Files in Tree' in parsedOptions):
 
 if ('Choose Files' in parsedOptions):
     files_File_Chooser = 1
+
+if ('Small (~ 1 Second)' in parsedOptions):
+    small_Interval = 1
+    interval_Size = 60
+
+if ('Default (~ 2 Seconds)' in parsedOptions):
+    default_Interval = 1
+    interval_Size = 120
+
+if ('Large (~ 5 Seconds)' in parsedOptions):
+    large_Interval = 1
+    interval_Size = 300
 
 if ('Learning:100' in parsedOptions):
     proportion_L100 = 1
@@ -109,6 +125,14 @@ if (proportion_L100 + proportion_L70_T30 + proportion_L60_T20_D20 + proportion_L
 if (proportion_L100 + proportion_L70_T30 + proportion_L60_T20_D20 + proportion_L70_T15_D15 > 1):
     print("Choose a proprtion.")
     sys.exit()
+
+if (small_Interval + default_Interval + large_Interval > 1):
+    print("Choose only one interval size.")
+if (small_Interval + default_Interval + large_Interval > 1):
+    small_Interval = 0
+    default_Interval = 1
+    large_Interval = 0
+    interval_Size = 120
 
 root = Tk()
 root.withdraw()
@@ -172,7 +196,7 @@ for file in parsedFiles:
                     if (list(items)[9] != ''):
                         p8.append(list(items)[9])
                 line_count += 1
-                if line_count % 80 == 0:
+                if line_count % interval_Size == 0:
                     intervalList.append(DataInterval(-1, time, p1, p2, p3, p4, p5, p6, p7, p8, activity))
                     numIntervals += 1
                     time = []

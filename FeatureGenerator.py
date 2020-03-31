@@ -45,6 +45,16 @@ questions = [
             {
                 'name': 'Choose Files'
             },
+            Separator('= Interval Size ='),
+            {
+                'name': 'Small (~ 1 Second)'
+            },
+            {
+                'name': 'Default (~ 2 Seconds)'
+            },
+            {
+                'name': 'Large (~ 5 Seconds)'
+            },
             Separator('= Proportion of Data in Datasets ='),
             {
                 'name': 'Learning:100'
@@ -79,7 +89,6 @@ questions = [
 
 #def getOptions(self):
 answers = prompt(questions, style=style)
-pprint(answers)
 
 with open('options.json', 'w') as json_file:
     json.dump(answers, json_file)
