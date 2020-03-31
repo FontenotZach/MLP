@@ -1,1 +1,1 @@
-{"Feature Generation Options": ["JSON Input", "All Files in Directory", "Learning:100", "JSON Output"]}
+{"Feature Generation Options": ["CSV Input", "Choose Files", "Learning:70|Testing:30", "XLSX Output"]}
