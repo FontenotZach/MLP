@@ -217,56 +217,56 @@ y = []
 for interval in intervalList:
     p1Float = [x for x in map(float, interval.p1)]
     p1Avg = sum(p1Float) / len(interval.p1)
-    p1SD = statistics.median(p1Float)
+    p1SD = statistics.pstdev(p1Float)
     #p1Mode = statistics.mode(p1Float)
     p1Median = statistics.median(p1Float)
     p1Var = statistics.pvariance(p1Float)
 
     p2Float = [x for x in map(float, interval.p2)]
     p2Avg = sum(p1Float) / len(interval.p2)
-    p2SD = statistics.median(p2Float)
+    p2SD = statistics.pstdev(p2Float)
     #p2Mode = statistics.mode(p2Float)
     p2Median = statistics.median(p2Float)
     p2Var = statistics.pvariance(p2Float)
 
     p3Float = [x for x in map(float, interval.p3)]
     p3Avg = sum(p1Float) / len(interval.p3)
-    p3SD = statistics.median(p3Float)
+    p3SD = statistics.pstdev(p3Float)
     #p3Mode = statistics.mode(p3Float)
     p3Median = statistics.median(p3Float)
     p3Var = statistics.pvariance(p3Float)
 
     p4Float = [x for x in map(float, interval.p4)]
     p4Avg = sum(p1Float) / len(interval.p4)
-    p4SD = statistics.median(p4Float)
+    p4SD = statistics.pstdev(p4Float)
     #p4Mode = statistics.mode(p4Float)
     p4Median = statistics.median(p4Float)
     p4Var = statistics.pvariance(p4Float)
 
     p5Float = [x for x in map(float, interval.p5)]
     p5Avg = sum(p1Float) / len(interval.p5)
-    p5SD = statistics.median(p5Float)
+    p5SD = statistics.pstdev(p5Float)
     #p5Mode = statistics.mode(p5Float)
     p5Median = statistics.median(p5Float)
     p5Var = statistics.pvariance(p5Float)
 
     p6Float = [x for x in map(float, interval.p6)]
     p6Avg = sum(p1Float) / len(interval.p6)
-    p6SD = statistics.median(p6Float)
+    p6SD = statistics.pstdev(p6Float)
     #p6Mode = statistics.mode(p6Float)
     p6Median = statistics.median(p6Float)
     p6Var = statistics.pvariance(p6Float)
 
     p7Float = [x for x in map(float, interval.p7)]
     p7Avg = sum(p1Float) / len(interval.p7)
-    p7SD = statistics.median(p7Float)
+    p7SD = statistics.pstdev(p7Float)
     #p7Mode = statistics.mode(p7Float)
     p7Median = statistics.median(p7Float)
     p7Var = statistics.pvariance(p7Float)
 
     p8Float = [x for x in map(float, interval.p8)]
     p8Avg = sum(p1Float) / len(interval.p8)
-    p8SD = statistics.median(p8Float)
+    p8SD = statistics.pstdev(p8Float)
     #p8Mode = statistics.mode(p8Float)
     p8Median = statistics.median(p8Float)
     p8Var = statistics.pvariance(p8Float)
