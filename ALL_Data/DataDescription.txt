@@ -1,0 +1,5 @@
+Driving 3 : freeway
+Driving 4: half free way
+run 2 & 3 ; good data
+walk 2 and 3: bad data: left shoe disconnected early
+stair up 3 data probably corrupted: No data for left presure
