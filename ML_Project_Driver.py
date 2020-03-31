@@ -120,23 +120,29 @@ print(selectedFiles)
 parsedFiles = root.splitlist(selectedFiles)
 print(parsedFiles)
 
+intervalList = []
+
 for file in parsedFiles:
     print(file)
-    interval = DataInterval()
     with open(file) as csv_file:
+        interval = DataInterval()
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
         for row in csv_reader:
             if line_count == 0:
-                for header in row:
-                    interval.dataList.append(header)
                 line_count += 1
             else:
-                i = 0
-                for item in row:
-                    interval.dataList[i].append(item)
-                    i += 1
+                items = row.values()
+                interval.p1.append(list(items)[0])
+                interval.p2.append(list(items)[1])
+                interval.p3.append(list(items)[2])
+                interval.p4.append(list(items)[3])
+                interval.p5.append(list(items)[4])
+                interval.p6.append(list(items)[5])
+                interval.p7.append(list(items)[6])
+                interval.p8.append(list(items)[7])
                 line_count += 1
+        intervalList.append(interval)
         print(f'Processed {line_count} lines.')
-    for header in interval.dataList:
-        print(header)
+
+print(intervalList[0].p1[0])
