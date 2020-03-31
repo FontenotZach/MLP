@@ -2,14 +2,21 @@ from pprint import pprint
 import json
 import sys
 import csv
-import DataInterval
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from tkinter import filedialog
 
 class DataInterval:
     intervalDuration = 0
-    dataList = [[]]
+    p1 = []
+    p2 = []
+    p3 = []
+    p4 = []
+    p5 = []
+    p6 = []
+    p7 = []
+    p8 = []
+    activity = 0
 
     def _init_(self, duration):
         self.intervalDuration = duration
@@ -125,6 +132,10 @@ for file in parsedFiles:
                     interval.dataList.append(header)
                 line_count += 1
             else:
+                i = 0
+                for item in row:
+                    interval.dataList[i].append(item)
+                    i += 1
                 line_count += 1
         print(f'Processed {line_count} lines.')
     for header in interval.dataList:
