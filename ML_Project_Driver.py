@@ -136,7 +136,7 @@ for file in parsedFiles:
                 p7.append(list(items)[8])
                 p8.append(list(items)[9])
                 line_count += 1
-        intervalList.append(DataInterval(2, p1, p2, p3, p4, p5, p6, p7, p8, p9))
+        intervalList.append(DataInterval(2, p1, p2, p3, p4, p5, p6, p7, p8))
         i += 1
         print(f'Processed {line_count} lines.')
 
