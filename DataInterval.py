@@ -1,5 +1,5 @@
 class DataInterval:
-    intervalDuration = 0
+    intervalDuration = -1
     p1 = []
     p2 = []
     p3 = []
@@ -8,9 +8,9 @@ class DataInterval:
     p6 = []
     p7 = []
     p8 = []
-    activity = 0
+    activity = -1
 
-    def __init__(self, duration, p1, p2, p3, p4, p5, p6, p7, p8):
+    def __init__(self, duration, p1, p2, p3, p4, p5, p6, p7, p8, activity):
         self.intervalDuration = duration
         self.p1 = p1
         self.p2 = p2
@@ -20,3 +20,4 @@ class DataInterval:
         self.p6 = p6
         self.p7 = p7
         self.p8 = p8
+        self.activity = activity

@@ -107,9 +107,26 @@ parsedFiles = root.splitlist(selectedFiles)
 print(parsedFiles)
 
 intervalList = []
-i = 0
+i = -1
+activity = -1
 
 for file in parsedFiles:
+    if (file.find('Cy') != -1):
+        activity = 0
+    if (file.find('Dr') != -1):
+        activity = 1
+    if (file.find('Ru') != -1):
+        activity = 2
+    if (file.find('Sit') != -1):
+        activity = 3
+    if (file.find('Sd') != -1):
+        activity = 4
+    if (file.find('Su') != -1):
+        activity = 5
+    if (file.find('St') != -1):
+        activity = 6
+    if (file.find('Wa') != -1):
+        activity = 7
     print(file)
     with open(file) as csv_file:
         csv_reader = csv.DictReader(csv_file)
@@ -136,9 +153,12 @@ for file in parsedFiles:
                 p7.append(list(items)[8])
                 p8.append(list(items)[9])
                 line_count += 1
-        intervalList.append(DataInterval(2, p1, p2, p3, p4, p5, p6, p7, p8))
+        intervalList.append(DataInterval(-1, p1, p2, p3, p4, p5, p6, p7, p8, activity))
         i += 1
         print(f'Processed {line_count} lines.')
 
 print(intervalList[0].p1[0])
 print(intervalList[1].p1[0])
+
+print(intervalList[0].activity)
+print(intervalList[1].activity)
