@@ -5,21 +5,7 @@ import csv
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from tkinter import filedialog
-
-class DataInterval:
-    intervalDuration = 0
-    p1 = []
-    p2 = []
-    p3 = []
-    p4 = []
-    p5 = []
-    p6 = []
-    p7 = []
-    p8 = []
-    activity = 0
-
-    def _init_(self, duration):
-        self.intervalDuration = duration
+from DataInterval import *
 
 input_JSON = 0
 input_CSV = 0
@@ -121,28 +107,38 @@ parsedFiles = root.splitlist(selectedFiles)
 print(parsedFiles)
 
 intervalList = []
+i = 0
 
 for file in parsedFiles:
     print(file)
     with open(file) as csv_file:
-        interval = DataInterval()
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
+        p1 = []
+        p2 = []
+        p3 = []
+        p4 = []
+        p5 = []
+        p6 = []
+        p7 = []
+        p8 = []
         for row in csv_reader:
             if line_count == 0:
                 line_count += 1
             else:
                 items = row.values()
-                interval.p1.append(list(items)[0])
-                interval.p2.append(list(items)[1])
-                interval.p3.append(list(items)[2])
-                interval.p4.append(list(items)[3])
-                interval.p5.append(list(items)[4])
-                interval.p6.append(list(items)[5])
-                interval.p7.append(list(items)[6])
-                interval.p8.append(list(items)[7])
+                p1.append(list(items)[2])
+                p2.append(list(items)[3])
+                p3.append(list(items)[4])
+                p4.append(list(items)[5])
+                p5.append(list(items)[6])
+                p6.append(list(items)[7])
+                p7.append(list(items)[8])
+                p8.append(list(items)[9])
                 line_count += 1
-        intervalList.append(interval)
+        intervalList.append(DataInterval(2, p1, p2, p3, p4, p5, p6, p7, p8, p9))
+        i += 1
         print(f'Processed {line_count} lines.')
 
 print(intervalList[0].p1[0])
+print(intervalList[1].p1[0])
