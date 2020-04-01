@@ -7,6 +7,7 @@ from tkinter.filedialog import askopenfilename
 from tkinter import filedialog
 from DataInterval import *
 import statistics
+import random
 
 input_JSON = 0
 input_CSV = 0
@@ -21,6 +22,11 @@ proportion_L100 = 0
 proportion_L70_T30 = 0
 proportion_L70_T15_D15 = 0
 proportion_L60_T20_D20 = 0
+
+output_JSON = 0
+output_CSV = 0
+output_TXT = 0
+output_XLSX = 0
 
 learning_Proportion = 1
 testing_Proportion = 0
@@ -100,6 +106,24 @@ if ('Learning:60|Testing:20|Degree:20' in parsedOptions):
     learning_Proportion = .60
     testing_Proportion = .20
     degree_Proportion = .20
+
+if ('JSON Output' in parsedOptions):
+    input_JSON = 1
+    print("JSON Output option not implemented")
+    sys.exit()
+
+if ('CSV Output' in parsedOptions):
+    input_CSV = 1
+
+if ('TXT Output (See README)' in parsedOptions):
+    input_TXT = 1
+    print("TXT Output option not implemented")
+    sys.exit()
+
+if ('XLSX Output' in parsedOptions):
+    input_XLSX = 1
+    print("XLSX Output option not implemented")
+    sys.exit()
 
 #check inputs
 if (input_CSV + input_TXT + input_JSON + input_XLSX > 1):
@@ -362,3 +386,36 @@ print(f"\tstanding: \t{standing}")
 print(f"\tstairs up: \t{stair_up}")
 print(f"\tstairs down: \t{stair_down}")
 print(f"\twalking: \t{walking}")
+
+x_Learn = []
+x_Test = []
+x_Degree = []
+
+if proportion_L100 == 0:
+    print("\nSplitting data...")
+    for row in x:
+        rand = random.randint(0,100) / 100
+        if rand < learning_Proportion:
+            x_Learn.append(row)
+        elif rand - learning_Proportion < testing_Proportion:
+            x_Test.append(row)
+        else:
+            x_Degree.append(row)
+
+with open('activity.csv', 'w', newline='') as f:
+     wr = csv.writer(f, quoting=csv.QUOTE_ALL)
+     wr.writerow(y)
+
+with open("learningData.csv", "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerows(x_Learn)
+
+if testing_Proportion > 0:
+    with open("testingData.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(x_Test)
+
+if degree_Proportion > 0:
+    with open("degreeData.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(x_Degree)
