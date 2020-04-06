@@ -9,6 +9,7 @@ from DataInterval import *
 import statistics
 import random
 import numpy as np
+import math
 
 input_JSON = 0
 input_CSV = 0
@@ -38,7 +39,7 @@ default_Interval = 0
 large_Interval = 0
 interval_Size = 120
 
-numClasses = 7
+classes = [0, 1, 2, 3, 4, 5 ,6 ,7]
 
 with open('options.json') as options:
     data = json.load(options)
@@ -435,11 +436,23 @@ if degree_Proportion > 0:
 
 a = np.array(x_Learn)
 b = np.array(y_Learn)
-s = (np.size(a,1), numClasses)
+s = (len(classes), np.size(a,1))
 
-theta = np.zeros(s)
+all_Theta = np.zeros(s)
+
+for i in classes:
+    index = 0
+    theta = all_Theta[i]
+    result = b
+    for j in b:
+        if j == i:
+            result[index] = 1
+        else:
+            result[index] = 0
+        index += 1
+    z = np.dot(a, theta)
+    h = 1.0 / (1.0 + np.power(math.e, z))
 
 prediction = np.dot(a, theta)
 print(a.shape)
-print(theta.shape)
 print(prediction.shape)
