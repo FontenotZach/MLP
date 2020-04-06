@@ -8,6 +8,7 @@ from tkinter import filedialog
 from DataInterval import *
 import statistics
 import random
+import numpy as np
 
 input_JSON = 0
 input_CSV = 0
@@ -36,6 +37,8 @@ small_Interval = 0
 default_Interval = 0
 large_Interval = 0
 interval_Size = 120
+
+numClasses = 7
 
 with open('options.json') as options:
     data = json.load(options)
@@ -388,12 +391,16 @@ print(f"\tstairs down: \t{stair_down}")
 print(f"\twalking: \t{walking}")
 
 x_Learn = []
+y_Learn = []
 x_Test = []
+y_Test = []
 x_Degree = []
+y_Degree = []
 
 if proportion_L100 == 0:
     print("\nSplitting data...")
     for row in x:
+        row.insert(0, 1)
         rand = random.randint(0,100) / 100
         if rand < learning_Proportion:
             x_Learn.append(row)
@@ -402,9 +409,9 @@ if proportion_L100 == 0:
         else:
             x_Degree.append(row)
 
-with open('activity.csv', 'w', newline='') as f:
+with open('learningActivity.csv', 'w', newline='') as f:
      wr = csv.writer(f, quoting=csv.QUOTE_ALL)
-     wr.writerow(y)
+     wr.writerow(y_Learn)
 
 with open("learningData.csv", "w", newline="") as f:
     writer = csv.writer(f)
@@ -414,8 +421,25 @@ if testing_Proportion > 0:
     with open("testingData.csv", "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(x_Test)
+    with open("testingActivity.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(y_Test)
 
 if degree_Proportion > 0:
     with open("degreeData.csv", "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(x_Degree)
+    with open("degreeActivity.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(y_Degree)
+
+a = np.array(x_Learn)
+b = np.array(y_Learn)
+s = (np.size(a,1), numClasses)
+
+theta = np.zeros(s)
+
+prediction = np.dot(a, theta)
+print(a.shape)
+print(theta.shape)
+print(prediction.shape)
