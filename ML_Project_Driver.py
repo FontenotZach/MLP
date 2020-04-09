@@ -10,6 +10,10 @@ import statistics
 import random
 import numpy as np
 import math
+from scipy import misc
+import Gradient as gr
+from scipy.optimize import minimize
+from scipy.optimize import fmin_bfgs, fmin_l_bfgs_b
 
 input_JSON = 0
 input_CSV = 0
@@ -39,7 +43,7 @@ default_Interval = 0
 large_Interval = 0
 interval_Size = 120
 
-classes = [0, 1, 2, 3, 4, 5 ,6 ,7]
+classes = 8
 
 with open('options.json') as options:
     data = json.load(options)
@@ -400,15 +404,20 @@ y_Degree = []
 
 if proportion_L100 == 0:
     print("\nSplitting data...")
+    index = 0
     for row in x:
         row.insert(0, 1)
         rand = random.randint(0,100) / 100
         if rand < learning_Proportion:
             x_Learn.append(row)
+            y_Learn.append(y[index])
         elif rand - learning_Proportion < testing_Proportion:
             x_Test.append(row)
+            y_Test.append(y[index])
         else:
             x_Degree.append(row)
+            y_Degree.append(y[index])
+        index += 1
 
 with open('learningActivity.csv', 'w', newline='') as f:
      wr = csv.writer(f, quoting=csv.QUOTE_ALL)
@@ -424,7 +433,7 @@ if testing_Proportion > 0:
         writer.writerows(x_Test)
     with open("testingActivity.csv", "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerows(y_Test)
+        writer.writerow(y_Test)
 
 if degree_Proportion > 0:
     with open("degreeData.csv", "w", newline="") as f:
@@ -432,27 +441,50 @@ if degree_Proportion > 0:
         writer.writerows(x_Degree)
     with open("degreeActivity.csv", "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerows(y_Degree)
+        writer.writerow(y_Degree)
 
 a = np.array(x_Learn)
 b = np.array(y_Learn)
-s = (len(classes), np.size(a,1))
+s = (classes, np.size(a,1))
 
 all_Theta = np.zeros(s)
+models = []
 
-for i in classes:
+num_Iters = 400
+
+bd = [(0, 1)] * np.size(all_Theta, 1)
+print(b)
+
+for i in range(0, classes):
+    print(i)
     index = 0
     theta = all_Theta[i]
-    result = b
+    result = b.copy()
     for j in b:
         if j == i:
             result[index] = 1
         else:
             result[index] = 0
         index += 1
-    z = np.dot(a, theta)
-    h = 1.0 / (1.0 + np.power(math.e, z))
+    print(result)
+    res = minimize(gr.cost, theta, args=(result, a), method='nelder-mead')
+    #res = fmin_l_bfgs_b(gr.cost, x0=theta, args=(result, a), bounds=bd, approx_grad=True, maxiter=400)
+    # print(len(res))
+    # print(res)
+    # print(i)
+    # if bool(res.success):
+    #     print("cool")
+    # else:
+    #     print("bruh")
+    models.append(res.x)
 
-prediction = np.dot(a, theta)
-print(a.shape)
-print(prediction.shape)
+with open('models.csv', 'w', newline='') as f:
+     wr = csv.writer(f, quoting=csv.QUOTE_ALL)
+     wr.writerow(models)
+
+a = np.array(x_Test)
+b = np.array(y_Test)
+
+prediction = gr.predict(x_Test, y_Test, models)
+
+print(prediction[0]/prediction[1])
