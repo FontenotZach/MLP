@@ -35,16 +35,6 @@ questions = [
             {
                 'name': 'XLSX Input'
             },
-            Separator('= File Sources ='),
-            {
-                'name': 'All Files in Directory'
-            },
-            {
-                'name': 'All Files in Tree'
-            },
-            {
-                'name': 'Choose Files'
-            },
             Separator('= Interval Size ='),
             {
                 'name': 'Small (~ 1 Second)'
@@ -54,19 +44,6 @@ questions = [
             },
             {
                 'name': 'Large (~ 5 Seconds)'
-            },
-            Separator('= Proportion of Data in Datasets ='),
-            {
-                'name': 'Learning:100'
-            },
-            {
-                'name': 'Learning:70|Testing:30'
-            },
-            {
-                'name': 'Learning:70|Testing:15|Degree:15'
-            },
-            {
-                'name': 'Learning:60|Testing:20|Degree:20'
             },
             Separator('= Output Format ='),
             {
@@ -84,7 +61,28 @@ questions = [
         ],
         'validate': lambda answer: 'You must choose at least one option.'
             if len(answer) == 0 else True
+    },
+    {
+        'type': 'input',
+        'name': 'learning',
+        'message': 'What proportion of the data should be reserved for training? (0-1)',
+    },
+    {
+        'type': 'input',
+        'name': 'testing',
+        'message': 'What proportion of the data should be reserved for testing? (0-1)',
+    },
+    {
+        'type': 'input',
+        'name': 'cross-validation',
+        'message': 'What proportion of the data should be reserved for cross-validation? (0-1)',
+    },
+    {
+        'type': 'input',
+        'name': 'classes',
+        'message': 'How many data classifications are there?',
     }
+
 ]
 
 #def getOptions(self):

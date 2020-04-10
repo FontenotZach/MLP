@@ -14,166 +14,37 @@ from scipy import misc
 import Gradient as gr
 from scipy.optimize import minimize
 from scipy.optimize import fmin_bfgs, fmin_l_bfgs_b
-
-input_JSON = 0
-input_CSV = 0
-input_TXT = 0
-input_XLSX = 0
-
-files_This_Dir = 0
-files_This_Dir_Tree = 0
-files_File_Chooser = 0
-
-proportion_L100 = 0
-proportion_L70_T30 = 0
-proportion_L70_T15_D15 = 0
-proportion_L60_T20_D20 = 0
-
-output_JSON = 0
-output_CSV = 0
-output_TXT = 0
-output_XLSX = 0
-
-learning_Proportion = 1
-testing_Proportion = 0
-degree_Proportion = 0
-
-small_Interval = 0
-default_Interval = 0
-large_Interval = 0
-interval_Size = 120
-
-classes = 8
+from tqdm import tqdm
+from time import sleep
+from Options import *
 
 with open('options.json') as options:
     data = json.load(options)
 
 parsedOptions = data['Feature Generation Options']
+learning_Proportion = float(data['learning'])
+testing_Proportion = float(data['learning'])
+cross_Validation_Proportion = float(data['learning'])
+classes = int(data['classes'])
 
-# check options
-if ('JSON Input' in parsedOptions):
-    input_JSON = 1
-    print("JSON Input option not implemented")
+opt = Options(parsedOptions, learning_Proportion, testing_Proportion, cross_Validation_Proportion, classes)
+if not bool(opt.valid):
+    print(opt.error)
     sys.exit()
 
-if ('CSV Input' in parsedOptions):
-    input_CSV = 1
-
-if ('TXT Input (See README)' in parsedOptions):
-    input_TXT = 1
-    print("TXT Input option not implemented")
+opt.checkOptions()
+if not bool(opt.valid):
+    print(opt.error)
     sys.exit()
 
-if ('XLSX Input' in parsedOptions):
-    input_XLSX = 1
-    print("XLSX Input option not implemented")
-    sys.exit()
-
-if ('All Files in Directory' in parsedOptions):
-    files_This_Dir = 1
-    print("All Files in Directory option not implemented")
-    sys.exit()
-
-if ('All Files in Tree' in parsedOptions):
-    files_This_Dir_Tree = 1
-    print("All Files in Tree option not implemented")
-    sys.exit()
-
-if ('Choose Files' in parsedOptions):
-    files_File_Chooser = 1
-
-if ('Small (~ 1 Second)' in parsedOptions):
-    small_Interval = 1
-    interval_Size = 60
-
-if ('Default (~ 2 Seconds)' in parsedOptions):
-    default_Interval = 1
-    interval_Size = 120
-
-if ('Large (~ 5 Seconds)' in parsedOptions):
-    large_Interval = 1
-    interval_Size = 300
-
-if ('Learning:100' in parsedOptions):
-    proportion_L100 = 1
-    learning_Proportion = 1
-
-if ('Learning:70|Testing:30' in parsedOptions):
-    proportion_L70_T30 = 1
-    learning_Proportion = .70
-    testing_Proportion = .30
-
-if ('Learning:70|Testing:15|Degree:15' in parsedOptions):
-    proportion_L70_T15_D15 = 1
-    learning_Proportion = .70
-    testing_Proportion = .15
-    degree_Proportion = .15
-
-if ('Learning:60|Testing:20|Degree:20' in parsedOptions):
-    proportion_L60_T20_D20 = 1
-    learning_Proportion = .60
-    testing_Proportion = .20
-    degree_Proportion = .20
-
-if ('JSON Output' in parsedOptions):
-    input_JSON = 1
-    print("JSON Output option not implemented")
-    sys.exit()
-
-if ('CSV Output' in parsedOptions):
-    input_CSV = 1
-
-if ('TXT Output (See README)' in parsedOptions):
-    input_TXT = 1
-    print("TXT Output option not implemented")
-    sys.exit()
-
-if ('XLSX Output' in parsedOptions):
-    input_XLSX = 1
-    print("XLSX Output option not implemented")
-    sys.exit()
-
-#check inputs
-if (input_CSV + input_TXT + input_JSON + input_XLSX > 1):
-    print("Choose only one input type.")
-    sys.exit()
-
-if (input_CSV + input_TXT + input_JSON + input_XLSX < 1):
-    print("Choose an input type")
-    sys.exit()
-
-if (files_This_Dir + files_File_Chooser + files_This_Dir_Tree > 1):
-    print("Choose only one file location.")
-    sys.exit()
-
-if (files_This_Dir + files_File_Chooser + files_This_Dir_Tree < 1):
-    print("Choose a file location.")
-    sys.exit()
-
-if (proportion_L100 + proportion_L70_T30 + proportion_L60_T20_D20 + proportion_L70_T15_D15 > 1):
-    print("Choose only one proprtion.")
-    sys.exit()
-
-if (proportion_L100 + proportion_L70_T30 + proportion_L60_T20_D20 + proportion_L70_T15_D15 > 1):
-    print("Choose a proprtion.")
-    sys.exit()
-
-if (small_Interval + default_Interval + large_Interval > 1):
-    print("Choose only one interval size.")
-if (small_Interval + default_Interval + large_Interval > 1):
-    small_Interval = 0
-    default_Interval = 1
-    large_Interval = 0
-    interval_Size = 120
-
-root = Tk()
-root.withdraw()
-selectedFiles = filedialog.askopenfilenames(parent=root,title='Choose a file')
-parsedFiles = root.splitlist(selectedFiles)
+interval_Size = opt.interval_Size
+parsedFiles = gr.getFiles()
 
 intervalList = []
 activity = -1
-# a bit hacky, consider alternate
+
+pbar = tqdm(total=len(parsedFiles), desc="Processing Files", ascii=" ░▒█")
+
 for file in parsedFiles:
     if (file.find('KaCy') != -1):
         activity = 0
@@ -191,6 +62,7 @@ for file in parsedFiles:
         activity = 6
     if (file.find('KaWa') != -1):
         activity = 7
+
     with open(file) as csv_file:
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
@@ -240,10 +112,15 @@ for file in parsedFiles:
                     p6 = []
                     p7 = []
                     p8 = []
-        print(f'\nProcessed {line_count} lines into {numIntervals} intervals from file: \n\t{file}.')
+    pbar.update()
+pbar.close()
+print("Done.")
 
+numDataPoints = 9
+numFeatures = 5 * numDataPoints
+numIters = len(intervalList) * numFeatures * 7
+pbar = tqdm(total=numIters, desc="Generating Features", ascii=" ░▒█")
 
-print("\nGenerating features...")
 x = []
 y = []
 for interval in intervalList:
@@ -311,51 +188,75 @@ for interval in intervalList:
     features.append(p1Median)
     features.append(p1Var)
     features.append(p1SD)
+    features.append(p1Var)
+
+    pbar.update(numFeatures)
 
     features.append(p2Avg)
     #features.append(p2Mode)
     features.append(p2Median)
     features.append(p2Var)
     features.append(p2SD)
+    features.append(p2Var)
+
+    pbar.update(numFeatures)
 
     features.append(p3Avg)
     #features.append(p3Mode)
     features.append(p3Median)
     features.append(p3Var)
     features.append(p3SD)
+    features.append(p3Var)
+
+    pbar.update(numFeatures)
 
     features.append(p4Avg)
     #features.append(p4Mode)
     features.append(p4Median)
     features.append(p4Var)
     features.append(p4SD)
+    features.append(p4Var)
 
     features.append(p5Avg)
     #features.append(p5Mode)
     features.append(p5Median)
     features.append(p5Var)
     features.append(p5SD)
+    features.append(p5Var)
+
+    pbar.update(numFeatures)
 
     features.append(p6Avg)
     #features.append(p6Mode)
     features.append(p6Median)
     features.append(p6Var)
     features.append(p6SD)
+    features.append(p6Var)
+
+    pbar.update(numFeatures)
 
     features.append(p7Avg)
     #features.append(p7Mode)
     features.append(p7Median)
     features.append(p7Var)
     features.append(p7SD)
+    features.append(p7Var)
+
+    pbar.update(numFeatures)
 
     features.append(p8Avg)
     #features.append(p8Mode)
     features.append(p8Median)
     features.append(p8Var)
     features.append(p8SD)
+    features.append(p8Var)
+
+    pbar.update(numFeatures)
 
     x.append(features)
     y.append(act)
+pbar.close()
+print("Done.")
 
 #features compiled
 cycling = 0
@@ -385,6 +286,49 @@ for act in y:
     if act == 7:
         walking += 1
 
+x_Learn = []
+y_Learn = []
+x_Test = []
+y_Test = []
+x_Cross_Validation = []
+y_Cross_Validation = []
+pbar = tqdm(total=len(x), desc="Splitting Data", ascii=" ░▒█")
+index = 0
+for row in x:
+    pbar.update()
+    row.insert(0, 1)
+    rand = random.randint(0,100) / 100
+    if rand < learning_Proportion:
+        x_Learn.append(row)
+        y_Learn.append(y[index])
+    elif rand - learning_Proportion < testing_Proportion:
+        x_Test.append(row)
+        y_Test.append(y[index])
+    else:
+        x_Cross_Validation.append(row)
+        y_Cross_Validation.append(y[index])
+    index += 1
+pbar.close()
+print("Done.")
+
+gr.post('learningData.csv', x_Learn)
+gr.post('learningActivity.csv', y_Learn)
+
+if testing_Proportion > 0:
+    gr.post('testingData.csv', x_Test)
+    gr.post('testingActivity.csv', y_Test)
+
+if cross_Validation_Proportion > 0:
+    gr.post('cross_ValidationData.csv', x_Cross_Validation)
+    gr.post('cross_ValidationActivity.csv', y_Cross_Validation)
+
+
+models = gr.generateModels(x_Learn, y_Learn, classes)
+
+gr.post('models.csv', models)
+
+prediction = gr.predict(x_Test, y_Test, models)
+
 print("\nTotal intervals for each activity:")
 print(f"\tcycling: \t{cycling}")
 print(f"\tdriving: \t{driving}")
@@ -395,96 +339,5 @@ print(f"\tstairs up: \t{stair_up}")
 print(f"\tstairs down: \t{stair_down}")
 print(f"\twalking: \t{walking}")
 
-x_Learn = []
-y_Learn = []
-x_Test = []
-y_Test = []
-x_Degree = []
-y_Degree = []
-
-if proportion_L100 == 0:
-    print("\nSplitting data...")
-    index = 0
-    for row in x:
-        row.insert(0, 1)
-        rand = random.randint(0,100) / 100
-        if rand < learning_Proportion:
-            x_Learn.append(row)
-            y_Learn.append(y[index])
-        elif rand - learning_Proportion < testing_Proportion:
-            x_Test.append(row)
-            y_Test.append(y[index])
-        else:
-            x_Degree.append(row)
-            y_Degree.append(y[index])
-        index += 1
-
-with open('learningActivity.csv', 'w', newline='') as f:
-     wr = csv.writer(f, quoting=csv.QUOTE_ALL)
-     wr.writerow(y_Learn)
-
-with open("learningData.csv", "w", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerows(x_Learn)
-
-if testing_Proportion > 0:
-    with open("testingData.csv", "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerows(x_Test)
-    with open("testingActivity.csv", "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(y_Test)
-
-if degree_Proportion > 0:
-    with open("degreeData.csv", "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerows(x_Degree)
-    with open("degreeActivity.csv", "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(y_Degree)
-
-a = np.array(x_Learn)
-b = np.array(y_Learn)
-s = (classes, np.size(a,1))
-
-all_Theta = np.zeros(s)
-models = []
-
-num_Iters = 400
-
-bd = [(0, 1)] * np.size(all_Theta, 1)
-print(b)
-
-for i in range(0, classes):
-    print(i)
-    index = 0
-    theta = all_Theta[i]
-    result = b.copy()
-    for j in b:
-        if j == i:
-            result[index] = 1
-        else:
-            result[index] = 0
-        index += 1
-    print(result)
-    res = minimize(gr.cost, theta, args=(result, a), method='nelder-mead')
-    #res = fmin_l_bfgs_b(gr.cost, x0=theta, args=(result, a), bounds=bd, approx_grad=True, maxiter=400)
-    # print(len(res))
-    # print(res)
-    # print(i)
-    # if bool(res.success):
-    #     print("cool")
-    # else:
-    #     print("bruh")
-    models.append(res.x)
-
-with open('models.csv', 'w', newline='') as f:
-     wr = csv.writer(f, quoting=csv.QUOTE_ALL)
-     wr.writerow(models)
-
-a = np.array(x_Test)
-b = np.array(y_Test)
-
-prediction = gr.predict(x_Test, y_Test, models)
-
+print("\n\n\tModel Accuracy = ")
 print(prediction[0]/prediction[1])
