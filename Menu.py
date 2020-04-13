@@ -88,5 +88,5 @@ questions = [
 #def getOptions(self):
 answers = prompt(questions, style=style)
 
-with open('options.json', 'w') as json_file:
-    json.dump(answers, json_file)
+with open('options.json', 'w') as jsonFile:
+    json.dump(answers, jsonFile)
