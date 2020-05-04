@@ -1,5 +1,5 @@
 # ML_Activity_Prediction
-Predicting what activity a user is preforming by pressure and accelerometer data.
+The Machine Learning Pipeline is a tool allowing for customized model generation and testing.  Given a set of features, the MLP will clean data, generate an optimal model, and output this model.
 
 Installation:
 
