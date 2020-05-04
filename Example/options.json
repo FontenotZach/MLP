@@ -1,1 +1,1 @@
-{"Feature Generation Options": ["CSV Input", "Default (~ 2 Seconds)", "CSV Output"], "learning": ".75", "testing": ".25", "cross-validation": "0", "classes": "8"}
+{"Feature Generation Options": ["CSV Input", "Default (~ 2 Seconds)", "CSV Output"], "learning": ".8", "testing": ".2", "cross-validation": "0", "classes": "8"}

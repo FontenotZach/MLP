@@ -9,6 +9,9 @@ class DataInterval:
     p6 = []
     p7 = []
     p8 = []
+    aX = []
+    aY = []
+    aZ = []
     activity = -1   # 0 - cycling
                     # 1 - driving
                     # 2 - running
@@ -18,7 +21,7 @@ class DataInterval:
                     # 6 - stair_down
                     # 7 - walking
 
-    def __init__(self, duration, time, p1, p2, p3, p4, p5, p6, p7, p8, activity):
+    def __init__(self, duration, time, p1, p2, p3, p4, p5, p6, p7, p8, aX, aY, aZ, activity):
         self.intervalDuration = duration
         self.time = time
         self.p1 = p1
@@ -29,4 +32,7 @@ class DataInterval:
         self.p6 = p6
         self.p7 = p7
         self.p8 = p8
+        self.aX = aX
+        self.aY = aY
+        self.aZ = aZ
         self.activity = activity
