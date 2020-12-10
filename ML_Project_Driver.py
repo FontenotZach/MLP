@@ -27,8 +27,8 @@ with open('options.json') as options:
     data = json.load(options)
 parsedOptions = data['Feature Generation Options']
 learningProportion = float(data['learning'])
-testingProportion = float(data['learning'])
-crossValidationProportion = float(data['learning'])
+testingProportion = float(data['testing'])
+crossValidationProportion = float(data['cross-validation'])
 classes = int(data['classes'])
 opt = Options(parsedOptions, learningProportion, testingProportion, crossValidationProportion, classes)
 if not bool(opt.valid):
