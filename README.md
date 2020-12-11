@@ -1,5 +1,5 @@
 # ML_Activity_Prediction
-The Machine Learning Pipeline is a tool allowing for customized model generation and testing.  Given a set of features, the MLP will clean data, generate an optimal model, and output this model.
+The Machine Learning Pipeline is a tool allowing for model generation through logistic regression and neural network algorithms.  The pipeline currently takes pressure sensor data from a specialized shoe, generting a model for predicting what acticty a user is doing, but can also be reconfigured for other uses.
 
 Installation:
 
