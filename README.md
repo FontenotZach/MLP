@@ -19,3 +19,5 @@ Use:
 
 The FeatureGen.bat file can be run from any desired directory.  This will open a menu where input, interval size, output, number of classes, and data splitting options can be set.
 The program will process any selected files and output them in the requested format.
+
+TODO: Improve modularity and reusability.  Create a pip package.
